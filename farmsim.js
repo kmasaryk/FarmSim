@@ -411,7 +411,7 @@ let model = {
 let view = {
     // Update all cells in field table to match field array.
     updateField: function(field) {
-	console.log("in view.updateField");
+	//console.log("in view.updateField");
 	for (let i = 0; i < field.length; i++) {
 	    let cell = document.getElementById("field" + i);
 	    this.removeChildren(cell);
@@ -715,16 +715,7 @@ function init() {
 	}
     }
     
-    setInterval(function() { model.monitorField(); }, 5000);
+    setInterval(function() { model.monitorField(); }, 1000);
 }
 
 window.onload = init;
-
-
-    // let x = document.getElementById("field0");
-    // x.onmouseenter = function() {
-    // 	x.setAttribute("class", "selectedCell");
-    // };
-    // x.onmouseleave = function() {
-    // 	x.removeAttribute("class");
-    // };
