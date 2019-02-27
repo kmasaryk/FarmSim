@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>FarmSim</title>
+    <style>
+      body {
+	  background-color: green;
+      }
+      img {
+	  display: block;
+	  vertical-align: middle;
+      }
+      #logo {
+	  position: absolute;
+	  top: 10px;
+	  left: 0px;
+	  width: 100%;
+      }
+      #logoImg {
+	  position: relative;
+	  margin-left: auto;
+	  margin-right: auto;
+      }
+      .selected {
+	  position: absolute;
+	  top: 0px;
+	  left: 0px;
+	  z-index: 1;
+	  height: 60px;
+	  width: 60px;
+	  border: 2px solid blue;
+      }
+      #gold {
+	  position: absolute;
+	  top: 34px;
+	  left: 20px;
+      }
+      #goldImg {
+	  display: inline;
+      }
+      #goldAmt {
+	  vertical-align: middle;
+	  font-size: 30px;
+	  font-weight: bold;
+	  margin-left: 10px;
+      }
+      #helpButton {
+	  position: absolute;
+	  top: 30px;
+	  right: 30px;
+      }
+      .helpModal {
+	  display: none;
+	  position: fixed;
+	  z-index: 1;
+	  left: 0;
+	  top: 0;
+	  width: 100%;
+	  height: 100%;
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgba(0,0,0,0.4);
+      }
+      .helpModalContent {
+	  background-color: lime;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 10px 25px;
+	  border: 1px solid #888;
+	  width: 50%;
+      }
+      .modalClose {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+      }
+      .modalClose:hover, .modalClose:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+      }
+      div#invDiv {
+	  position: absolute;
+	  top: 120px;
+	  left: 10px;
+      }
+      #invLabel {
+	  position: relative;
+	  display: block;
+	  text-align: center;
+	  font-weight: bold;
+	  font-size: 24px;
+      }
+      table#inv {
+	  position: relative;
+	  top: 0px;
+	  left: 0px;
+	  border: 2px solid black;
+	  border-collapse: collapse;
+      }
+      table#inv td {
+	  width: 64px;
+	  height: 64px;
+	  padding: 0px;
+	  border: 2px solid black;
+	  background-color: mediumseagreen;
+      }
+      div#fieldDiv{
+	  position: absolute;
+	  top: 150px;
+	  left: 225px;
+      }
+      table#field {
+	  position: relative;
+	  top: 0px;
+	  border: 2px solid black;
+	  border-collapse: collapse;
+      }
+      table#field td {
+	  width: 64px;
+	  height: 64px;
+	  padding: 0px;
+	  border: 2px solid black;
+	  background: url("dirt.png") no-repeat;
+      }
+      div#marketDiv {
+	  position: absolute;
+	  top: 200px;
+	  right: 200px;
+      }
+      #marketLabel {
+	  position: relative;
+	  display: block;
+	  text-align: center;
+	  font-weight: bold;
+	  font-size: 24px;
+      }
+      table#market {
+	  position: relative;
+	  top: 0px;
+	  left: 0px;
+	  border: 2px solid black;
+	  border-collapse: collapse;
+      }
+      table#market td {
+	  width: 128px;
+	  height: 64px;
+	  padding: 0px;
+	  border: 2px solid black;
+	  background-color: darkgreen;
+	  text-align: center;
+	  font-weight: bold;
+	  font-style: italic;
+      }
+      div#suppliesDiv {
+	  position: absolute;
+	  top: 120px;
+	  right: 10px;
+	  text-align: center;
+      }
+      #suppliesLabel {
+	  position: relative;
+	  display: block;
+	  text-align: center;
+	  font-weight: bold;
+	  font-size: 24px;
+      }
+      table#supplies {
+	  position: relative;
+	  top: 0px;
+	  left: 0px;
+	  border: 2px solid black;
+	  border-collapse: collapse;
+      }
+      table#supplies td {
+	  width: 64px;
+	  height: 64px;
+	  padding: 0px;
+	  border: 2px solid black;
+	  background-color: mediumseagreen;
+      }
+      #buyButton {
+	  background-color: mediumseagreen;
+	  border: none;
+	  font-size: 30px;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 10px;
+	  margin-bottom: 10px;
+	  margin-left: auto;
+	  margin-right: auto;
+	  padding: 5px 10px 5px 10px;
+	  border-radius: 6px;
+	  border: 1px solid black;
+      }
+      .supplyItemDiv {
+	  position: relative;
+	  z-index: auto;
+      }
+      .invItemDiv {
+	  position: relative;
+	  z-index: auto;
+      }
+      .fieldItemDiv {
+	  position: relative;
+	  z-index: auto;
+      }
+      .supTooltip {
+	  position: absolute;
+	  top: 25%;
+	  right: 105%; /* position to the left of the img */
+	  z-index: 1;
+	  visibility: hidden;
+	  width: 200px;
+	  background-color: wheat;
+	  color: black;
+	  text-align: left;
+	  padding: 5px;
+	  border-radius: 6px;
+	  border: 1px solid black;
+      }
+      .invTooltip {
+	  position: absolute;
+	  top: 25%;
+	  left: 105%; /* position to the left of the img */
+	  z-index: 1;
+	  visibility: hidden;
+	  width: 200px;
+	  background-color: wheat;
+	  color: black;
+	  text-align: left;
+	  padding: 5px;
+	  border-radius: 6px;
+	  border: 1px solid black;
+      }
+      .fieldTooltip {
+	  position: absolute;
+	  top: 25%;
+	  left: 105%; /* position to the left of the img */
+	  z-index: 1;
+	  visibility: hidden;
+	  width: 200px;
+	  background-color: wheat;
+	  color: black;
+	  text-align: left;
+	  padding: 5px;
+	  border-radius: 6px;
+	  border: 1px solid black;
+      }
+      .supTooltip::after {
+	  content: " ";
+	  position: absolute;
+	  top: 50%;
+	  left: 100%;
+	  margin-top: -5px;	  
+	  border-width: 5px;
+	  border-style: solid;
+	  border-color: transparent transparent transparent wheat;
+      }
+      .invTooltip::after {
+	  content: " ";
+	  position: absolute;
+	  top: 50%;
+	  right: 100%;
+	  margin-top: -5px;
+	  border-width: 5px;
+	  border-style: solid;
+	  border-color: transparent wheat transparent transparent;
+      }
+      .fieldTooltip::after {
+	  content: " ";
+	  position: absolute;
+	  top: 50%;
+	  right: 100%;
+	  margin-top: -5px;
+	  border-width: 5px;
+	  border-style: solid;
+	  border-color: transparent wheat transparent transparent;
+      }
+      .supplyItemDiv:hover .supTooltip {
+	  visibility: visible;
+      }
+      .invItemDiv:hover .invTooltip {
+	  visibility: visible;
+      }
+      .fieldItemDiv:hover .fieldTooltip {
+	  visibility: visible;
+      }
+      
+    </style>
+  </head>
+
+  <body>
+    <div id="logo"><img id="logoImg" src="logo_350.png"></div>
+    <img id="helpButton" src="help_32.png">
+    <div id="helpModal" class="helpModal">
+      <div class="helpModalContent">
+	<span id="modalClose" class="modalClose">&times;</span>
+	<h3 style="text-align: center;">Instructions</h3>
+	<p>FarmSim is a farming simulation written entirely in Javascript,
+	  HTML5 and CSS6. It's just a prototype so there's a noticeable lack of
+	  features to actually make it fun to play.</p>
+	<p>You begin with a small amount of gold pieces (gp) as indicated next
+	  to the coin icon in the top left of the page. You also have a couple
+	  of seeds in your inventory on the left side of the page.</p>
+	<p>The middle of the page holds the field. To plant a seed, simply drag
+	  the seed from your inventory to an emplty plot in the field and drop
+	  it. You can hover the mouse over the plot to see the progress of the
+	  growing seed and the amount of time remaining until it's ripe. Once
+	  ripe, you can drag the item and drop it onto the square under the
+	  "Market" indicated on the right side of the page. You should see your
+	  gold increase by the "ripe price" value of the item.</p>
+	<p>On the far right side of the page, you'll find the Supplies area. To
+	  make a purchase, simply click on an item and then click the "Buy"
+	  button at the bottom of the area. If you have enough gold, you should
+	  see your gold amount decrease by the price of the item. The new item
+	  will now be available in your inventory. Note that items do stack in
+	  the inventory so you'll need to hover the mouse over an item to get a
+	  tooltip displaying the quantity.</p>
+	<h3 style="text-align: center;">Happy Farming!</h3>
+      </div>
+    </div>
+    <div id="gold">
+      <img id="goldImg" src="coin_32.png"><span id="goldAmt">0</span>
+    </div>
+    <div id="invDiv">
+      <span id="invLabel">Inventory</span>
+      <table id="inv">
+	<tr>
+	  <td id="inv0"></td> <td id="inv1"></td>
+	</tr>
+	<tr>
+	  <td id="inv2"></td> <td id="inv3"></td>
+	</tr>
+	<tr>
+	  <td id="inv4"></td> <td id="inv5"></td>
+	</tr>
+	<tr>
+	  <td id="inv6"></td> <td id="inv7"></td>
+	</tr>
+	<tr>
+	  <td id="inv8"></td> <td id="inv9"></td>
+	</tr>
+      </table>
+    </div>
+    <div id="fieldDiv">
+      <table id="field">
+	<tr>
+	  <td id="field0"></td> <td id="field1"></td><td id="field2"></td>
+	  <td id="field3"></td>
+	</tr>
+	<tr>
+	  <td id="field4"></td> <td id="field5"></td><td id="field6"></td>
+	  <td id="field7"></td>
+	</tr>
+	<tr>
+	  <td id="field8"></td> <td id="field9"></td><td id="field10"></td>
+	  <td id="field11"></td>
+	</tr>
+      </table>
+    </div>
+    <div id="msDiv">
+      <div id="marketDiv">
+	<span id="marketLabel">Market</span>
+	<table id="market">
+	  <tr>
+	    <td id="mkt0">DROP HERE TO SELL!</td>
+	  </tr>
+	</table>
+      </div>
+      <div id="suppliesDiv">
+	<span id="suppliesLabel">Supplies</span>
+	<table id="supplies">
+	  <tr>
+	    <td id="sup0"></td> <td id="sup1"></td>
+	  </tr>
+	  <tr>
+	    <td id="sup2"></td> <td id="sup3"></td>
+	  </tr>
+	  <tr>
+	    <td id="sup4"></td> <td id="sup5"></td>
+	  </tr>
+	  <tr>
+	    <td id="sup6"></td> <td id="sup7"></td>
+	  </tr>
+	  <tr>
+	    <td id="sup8"></td> <td id="sup9"></td>
+	  </tr>
+	</table>
+	<button type="button" id="buyButton">Buy</button>
+      </div>
+    </div>
+    <script src="farmsim.js?v26"></script>
+  </body>
+
+</html>
