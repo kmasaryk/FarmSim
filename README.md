@@ -22,6 +22,10 @@ Just clone it to a webdir and point your browser at the index.html file!
 Unfortunatly, I'm not able to distribute all the assets legally due to the
 various licenses attached to them.
 
+## Demo
+A demo of the full game with assets is here:
+[http://farmsim.brewdragon.pub](http://farmsim.brewdragon.pub)
+
 ## Playing the Game
 Gameplay is fairly self-explanatory. For help, just click the '?' icon in the
 top right corner of the page.
